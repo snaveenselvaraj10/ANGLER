@@ -1,0 +1,15 @@
+<div *ngFor="let user of users">
+  <p>{{ user.firstName }} - {{ user.email }} 
+    <button (click)="editUser(user)">Edit</button>
+    <button (click)="deleteUser(user.id)">Delete</button>
+  </p>
+</div>
+
+<form *ngIf="showForm" (ngSubmit)="submitForm()">
+  <input type="text" placeholder="Name" name="firstName" required><br>
+  <input type="text" placeholder="Name" name="lastName" required><br>
+  <input type="email" placeholder="Email"  name="email" required><br>
+  <button type="submit">{{ isEdit ? 'Update' : 'Add' }}</button>
+</form>
+
+<button (click)="showForm = true; resetForm()">Add User</button>
