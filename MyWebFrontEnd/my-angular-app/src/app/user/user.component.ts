@@ -8,12 +8,17 @@ import { User } from './model/user';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  users: User[] = [];
-  userForm: User = { id: 0, firstName: '', lastName:'', email: '' };
-  showForm: boolean = false;
-  isEdit: boolean = false;
+  users: User[] = [
+    { id: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
+    { id: 2, firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com' },
+    { id: 3, firstName: 'Alice', lastName: 'Smith', email: 'alice@example.com' }
+  ];
+  selectedUser: User = { id: 0, firstName: '', lastName: '', email: '' };
+  user: User = { id: 0, firstName: '', lastName: '', email: '' };
+  isEdit = false;
+  isNew = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -26,36 +31,35 @@ export class UserComponent implements OnInit {
   }
 
   editUser(user: User): void {
-    this.userForm = { ...user };
-    this.showForm = true;
+    this.selectedUser = { ...user }; // Make a copy to avoid modifying the original user
     this.isEdit = true;
+    this.isNew = false;
   }
 
-  submitForm(): void {
-    if (this.isEdit) {
-      this.userService.updateUser(this.userForm).subscribe(() => {
-        this.loadUsers();
-        this.resetForm();
-      });
-    } else {
-      this.userService.addUser(this.userForm).subscribe(() => {
-        this.loadUsers();
-        this.resetForm();
-      });
-    }
+  updateUser(): void {
+    this.userService.updateUser(this.selectedUser).subscribe(() => {
+      this.loadUsers();
+      this.cancel();
+    });
   }
 
-  deleteUser(id: number): void {
-    if (confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(id).subscribe(() => {
-        this.loadUsers();
-      });
-    }
+  addUser(): void {
+    this.userService.addUser(this.user).subscribe(() => {
+      this.loadUsers();
+      this.cancel();
+    });
   }
 
-  resetForm(): void {
-    this.userForm = { id: 0, firstName: '',  lastName:'', email: '' };
-    this.showForm = false;
+  deleteUser(userId: number): void {
+    this.userService.deleteUser(userId).subscribe(() => {
+      this.loadUsers();
+    });
+  }
+
+  cancel(): void {
+    this.selectedUser = { id: 0, firstName: '', lastName: '', email: '' };
+    this.user = { id: 0, firstName: '', lastName: '', email: '' };
     this.isEdit = false;
+    this.isNew = false;
   }
 }
