@@ -1,0 +1,16 @@
+<!-- user-create.component.html -->
+
+<div>
+    <label>First Name:</label>
+    <input [(ngModel)]="user.firstName" type="text">
+  </div>
+  <div>
+    <label>Last Name:</label>
+    <input [(ngModel)]="user.lastName" type="text">
+  </div>
+  <div>
+    <label>Email:</label>
+    <input [(ngModel)]="user.email" type="email">
+  </div>
+  <button (click)="createUser()">Create User</button>
+  
